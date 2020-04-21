@@ -81,13 +81,13 @@ async def wait(ctx):
         if guild not in member_queues:
                 member_queues[guild] = deque()
                 member_queues[guild].append(author)
-                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)+1}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
         else:
             if author in member_queues[guild]:
-                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)+1}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
             else:
                 member_queues[guild].append(author)
-                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)+1}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
 
 
 @bot.command(pass_context=True)
