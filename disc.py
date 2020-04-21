@@ -32,12 +32,14 @@ enabled = {}
 
 
 bot = commands.Bot(command_prefix="$")
+async
+bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="mit anderen Bots"))
 
 
 @bot.command(pass_context=True, help="Öffnet die Warteschlange")
 async def start(ctx):
     if set([role.name for role in ctx.message.author.roles]) & set(roles):
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="ob sich Studis in die warteschlange stellen"))
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="ob Studis warten"))
         await ctx.send("Warteschlange ist nun geöffnet.")
         enabled[ctx.message.guild.id] = True
 
@@ -45,7 +47,7 @@ async def start(ctx):
 async def stop(ctx):
     if set([role.name for role in ctx.message.author.roles]) & set(roles):
         await ctx.send("Warteschlange ist nun geschlossen.")
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="mit seinen anderen Bot-Freunden"))
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="mit anderen Bots"))
         enabled[ctx.message.guild.id] = False
         member_queues.pop(ctx.message.guild.id)
 
