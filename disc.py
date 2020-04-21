@@ -146,8 +146,12 @@ async def ls(ctx):
         if not enabled[guild]:
             await ctx.send(f"Hallo {get_displaynick(author)}. Die Warteschlange ist aktuell noch geschlossen. Du kannst sie mit $start öffnen.")
         else:
-            for number, member in enumerate(member_queues[guild]):
-                await ctx.send(f"{number+1}. {get_displaynick(member)}")
+            if member_queues[guild]:
+                for number, member in enumerate(member_queues[guild]):
+                    await ctx.send(f"{number+1}. {get_displaynick(member)}")
+            else:
+                await ctx.send(f"Es ist im Moment niemand in der Warteschlange!")
+
 
 with open("config.json") as f:
     config = json.load(f)
