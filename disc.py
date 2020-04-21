@@ -32,7 +32,6 @@ enabled = {}
 
 
 bot = commands.Bot(command_prefix="$")
-async
 bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="mit anderen Bots"))
 
 
