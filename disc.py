@@ -59,6 +59,15 @@ async def status(ctx):
         enabled[ctx.message.guild.id] = False
 
 
+def get_displaynick(author):
+    nick = ""
+    if author.nick:
+        nick = author.nick
+    else:
+        nick = str(author).split("#")[0]
+    return nick
+
+
 @bot.command(pass_context=True, help="Anstellen in Warteschlange")
 async def wait(ctx):
     author = ctx.message.author
@@ -67,18 +76,18 @@ async def wait(ctx):
         enabled[guild] = False
 
     if not enabled[guild]:
-        await ctx.send(f"Hallo {author.nick if author.nick else author} die Warteschlange ist aktuell geschlossen. Bei Fragen kannst du unseren 24/7 Chatbot befragen.")
+        await ctx.send(f"Hallo {get_displaynick(author)} die Warteschlange ist aktuell geschlossen.")
     else:
         if guild not in member_queues:
                 member_queues[guild] = deque()
                 member_queues[guild].append(author)
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
         else:
             if author in member_queues[guild]:
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
             else:
                 member_queues[guild].append(author)
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell in Position {member_queues[guild].index(author)}. Mit $wait kannst du dir deine aktuelle Position anzeigen lassen")
 
 
 @bot.command(pass_context=True)
@@ -88,16 +97,16 @@ async def leave(ctx, help="Verlassen der Warteschlange"):
     if guild not in enabled:
         enabled[guild] = False
     if not enabled[guild]:
-        await ctx.send(f"Hallo {author.nick if author.nick else author} die Warteschlange ist aktuell geschlossen. Bei Fragen kannst du unseren 24/7 Chatbot befragen.")
+        await ctx.send(f"Hallo {get_displaynick(author)} die Warteschlange ist aktuell geschlossen. Bei Fragen kannst du unseren 24/7 Chatbot befragen.")
     else:
         if guild not in member_queues:
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du bist aktuell nicht in der Warteschlange. Du kannst dich mit $wait anstellen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell nicht in der Warteschlange. Du kannst dich mit $wait anstellen")
         else:
             if author in member_queues[guild]:
                 member_queues[guild].remove(author)
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du hast die Warteschlange verlassen.")
+                await ctx.send(f"Hallo {get_displaynick(author)} du hast die Warteschlange verlassen.")
             else:
-                await ctx.send(f"Hallo {author.nick if author.nick else author} du bist aktuell nicht in der Warteschlange. Du kannst dich mit $wait anstellen")
+                await ctx.send(f"Hallo {get_displaynick(author)} du bist aktuell nicht in der Warteschlange. Du kannst dich mit $wait anstellen")
 
 
 @bot.command(pass_context=True)
@@ -109,10 +118,10 @@ async def next(ctx):
 
     if guild not in enabled:
         enabled[guild] = False
-    
+
     if set([role.name for role in ctx.message.author.roles]) & set(roles):
         if not enabled[guild]:
-            await ctx.send(f"Hallo {author.nick if author.nick else author}. Die Warteschlange ist aktuell noch geschlossen. Du kannst sie mit $start öffnen.")
+            await ctx.send(f"Hallo {get_displaynick(author)}. Die Warteschlange ist aktuell noch geschlossen. Du kannst sie mit $start öffnen.")
         else:
             if len(member_queues[guild]) >= 1:
                 member = member_queues[guild].popleft()
@@ -121,11 +130,11 @@ async def next(ctx):
             try:
                 next_member = member_queues[guild].popleft()
                 member_queues[guild].appendleft(next_member)
-                await ctx.send(f"{member.nick if member.nick else member} ist dran. Der nächste ist {next_member.mention}")
+                await ctx.send(f"{get_displaynick(member)} ist dran. Der nächste ist {next_member.mention}")
                 await member.move_to(vc)
             except IndexError:
                 await member.move_to(vc)
-                await ctx.send(f"{member.nick if member.nick else member} ist dran. Der nächste ist Niemand :(")
+                await ctx.send(f"{get_displaynick(member)} ist dran. Der nächste ist Niemand :(")
 
 @bot.command(pass_context=True)
 async def ls(ctx):
@@ -135,10 +144,10 @@ async def ls(ctx):
         enabled[guild] = False
     if set([role.name for role in ctx.message.author.roles]) & set(roles):
         if not enabled[guild]:
-            await ctx.send(f"Hallo {author.nick if author.nick else author}. Die Warteschlange ist aktuell noch geschlossen. Du kannst sie mit $start öffnen.")
+            await ctx.send(f"Hallo {get_displaynick(author)}. Die Warteschlange ist aktuell noch geschlossen. Du kannst sie mit $start öffnen.")
         else:
             for member in member_queues[guild]:
-                await ctx.send(f"{member.nick if member.nick else member}")
+                await ctx.send(f"{get_displaynick(member)}")
 
 with open("config.json") as f:
     config = json.load(f)

@@ -1,4 +1,4 @@
-# Warteschlagenbot für Discord
+# Warteschlangenbot für Discord
 
 ## Installation
 Nach dem Klonen des Repositories gilt es die folgenden Schritte auszuführen:
