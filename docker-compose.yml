@@ -5,3 +5,6 @@ services:
   wartenschlangenbot:
     image: warteschlangenbot:latext
     build: .
+    environment:
+      API_KEY: "CrVvEIRFV2Yhn3H2AuXAn2AU7xdkRq4g"
+      ROLES: "Tutor"

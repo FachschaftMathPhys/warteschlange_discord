@@ -21,6 +21,7 @@
 
 import discord
 import json
+import os
 from discord.ext import commands
 from collections import deque
 member_queues = {}
@@ -153,11 +154,15 @@ async def ls(ctx):
                 await ctx.send(f"Es ist im Moment niemand in der Warteschlange!")
 
 
-with open("config.json") as f:
-    config = json.load(f)
+if os.path.isfile("config.json"):
+    with open("config.json") as f:
+        config = json.load(f)
+else:
+    config = {}
 
-api_key = config.get("api_key")
-roles = config.get("roles")
+api_key = config.get("api_key", os.environ.get("API_KEY"))
+roles = config.get("roles", os.environ.get("ROLES"))
+
 if not api_key:
     raise RuntimeError("Config must contain api_key")
 if not roles:
