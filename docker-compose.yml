@@ -1,0 +1,7 @@
+---
+version: "3.0"
+
+services:
+  wartenschlangenbot:
+    image: warteschlangenbot:latext
+    build: .
